@@ -29,23 +29,25 @@ def rename_mdfile():
     new_file = path + new_name + ".md"
 
     # 新旧配置文件目录的绝对路径
-    print("\n请输入md文件的配置文件（如图片文件）保存的文件夹，默认为md_assets，即配置文件保存在md_assets\\${filename}中。")
-    assets_path = input("若与默认一致，可直接回车，否则请输入你的配置文件夹名字：")
-    if len(assets_path) == 0:
-        assets_path = "md_assets"
-    old_dict = path + assets_path + "\\" + old_name
-    new_dict = path + assets_path + "\\" + new_name
+    old_dict = path +  old_name + ".assets"
+    new_dict = path +  new_name + ".assets"
+    print("\n配置文件（如图片文件）保存的文件夹将保存在"+ new_dict +"中。")
 
     try:
         print("\n\n1. 开始修改md文件中的引用")
-        alter(old_file, assets_path, old_name, new_name)
+        alter(old_file, old_name, new_name)
         print("(1/3)md文件中的引用修改完成~")
+
         print("\n2. 开始修改md文件名")
         os.rename(old_file, new_file)
         print("(2/3)md文件名修改完成~")
+
         print("\n3. 开始修改配置文件夹名")
         os.rename(old_dict, new_dict)
         print("(3/3)配置文件夹名修改完成~")
+
+        os.remove(old_file + ".bak")
+
     except Exception as error:
         print("\n程序出错，错误信息如下：")
         print(error)
@@ -54,19 +56,20 @@ def rename_mdfile():
 
 
 # 修改文件内容
-def alter(file, assets_path, old_str, new_str):
-    old_str = assets_path + "/" + old_str + "/"
-    new_str = assets_path + "/" + new_str + "/"
-    with open(file, "r", encoding="utf-8") as f1, open("%s.bak" % file, "w", encoding="utf-8") as f2:
+def alter(file, old_name, new_name):
+    print("love")
+    old_str = old_name + ".assets/"
+    new_str = new_name + ".assets/"
+    with open(file, "r", encoding="utf-8") as f1, open("%s.tmp" % file, "w", encoding="utf-8") as f2:
         counter = 0
         for line in f1:
             if (old_str in line):
                 line = line.replace(old_str, new_str)
                 counter += 1
             f2.write(line)
-        print("——共修改了【%s】行引用~" % counter)
-    os.remove(file)
-    os.rename("%s.bak" % file, file)
+        print("--共修改了【%s】行引用~" % counter)
+    os.rename(file, file + ".bak")
+    os.rename("%s.tmp" % file, file)
 
 
 # 主程序
