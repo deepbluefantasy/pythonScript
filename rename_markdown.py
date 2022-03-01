@@ -64,8 +64,8 @@ def rename_mdfile():
 
 # 修改文件内容
 def alter(old_file, new_file, old_name, new_name):
-    old_str = old_name + ".assets/"
-    new_str = new_name + ".assets/"
+    old_str = "(" + old_name + ".assets"
+    new_str = "(" + new_name + ".assets"
     with open(old_file, "r", encoding="utf-8") as f1, open(new_file, "w", encoding="utf-8") as f2:
         counter = 0
         for line in f1:
